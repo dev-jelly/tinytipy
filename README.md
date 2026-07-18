@@ -2,6 +2,8 @@
 
 > Diff-driven text morphing: animate **only the changed parts** when transforming text from A → B, with a typing cursor. Korean IME-aware.
 
+[Live playground](https://dev-jelly.github.io/tinytipy/)
+
 Given two strings, tinytipy diffs them, then animates the transition — erasing the removed characters and typing the inserted ones (composing Korean syllable-by-syllable like a real IME), while shared text stays put. Perfect for showing **speech-recognition corrections**, **AI edits**, **form fixes**, or any A→B text reveal.
 
 - 🎯 **Only the diffs move** — unchanged text is never re-typed.
