@@ -1,0 +1,28 @@
+{
+  "name": "tinytipy",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Diff-driven text morphing: animate only the changed parts when morphing text from A to B, with a typing cursor. Framework-agnostic core + React/Vue/Svelte/Solid/DOM adapters.",
+  "type": "module",
+  "license": "MIT",
+  "author": "dev-jelly",
+  "scripts": {
+    "build": "pnpm -r run build",
+    "dev": "pnpm -r --parallel run dev",
+    "pretypecheck": "pnpm --filter @dev-jelly/tinytipy build",
+    "typecheck": "pnpm -r run typecheck",
+    "pretest": "pnpm --filter @dev-jelly/tinytipy build",
+    "test": "pnpm -r run test",
+    "release:check": "pnpm build && pnpm typecheck && pnpm test",
+    "release:dry-run": "pnpm release:check && pnpm -r --filter './packages/*' publish --dry-run --no-git-checks",
+    "clean": "pnpm -r exec rm -rf dist .turbo node_modules/.cache",
+    "example": "pnpm --filter playground dev"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.0"
+  },
+  "packageManager": "pnpm@9.12.0",
+  "engines": {
+    "node": ">=18"
+  }
+}

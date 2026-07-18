@@ -1,0 +1,47 @@
+{
+  "name": "@dev-jelly/tinytipy-svelte",
+  "version": "0.1.0",
+  "description": "Svelte adapter for tinytipy — diff-driven text morphing with a typing cursor (store + action, Svelte 4 & 5).",
+  "type": "module",
+  "license": "MIT",
+  "author": "dev-jelly",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "files": ["dist", "README.md"],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "prepack": "pnpm run build"
+  },
+  "dependencies": {
+    "@dev-jelly/tinytipy": "workspace:*"
+  },
+  "peerDependencies": {
+    "svelte": ">=4"
+  },
+  "devDependencies": {
+    "jsdom": "^25.0.0",
+    "svelte": "^5.0.0",
+    "tsup": "^8.3.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0"
+  },
+  "publishConfig": { "access": "public" },
+  "engines": { "node": ">=18" }
+}

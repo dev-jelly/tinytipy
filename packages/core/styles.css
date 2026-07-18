@@ -1,0 +1,92 @@
+/**
+ * tinytipy — canonical styles.
+ *
+ * Import once per app (any framework adapter):
+ *   import "@dev-jelly/tinytipy/styles.css";
+ *
+ * These are intentionally minimal: a trailing typing cursor that remains at
+ * the end after completion, and a layout reservation technique. No colors, no
+ * underlines — color inherits from `currentColor`, so the morph blends into
+ * whatever text styles surround it.
+ *
+ * Adapters render this structure:
+ *   <span class="tm-root">
+ *     <span class="tm-reserve" aria-hidden="true">{reserve text}</span>
+ *     <span class="tm-layer" aria-hidden="true">
+ *       <span class="tm-run tm-run--{kind}" data-status="{status}">{text}</span>
+ *       <span class="tm-cursor" aria-hidden="true"></span>
+ *       ...
+ *     </span>
+ *     <span class="tm-sr-only">{final text for screen readers}</span>
+ *   </span>
+ */
+
+.tm-root {
+  position: relative;
+  display: inline-grid;
+  vertical-align: baseline;
+  /* `white-space: pre-wrap` keeps typed whitespace/line breaks visible and
+     lets long content wrap instead of overflowing. Override per-app if needed. */
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Both layers occupy the same grid cell so the reserve layer dictates size. */
+.tm-root > .tm-reserve,
+.tm-root > .tm-layer {
+  grid-area: 1 / 1;
+}
+
+/* Invisible copy used only to reserve the final box (prevents reflow). */
+.tm-reserve {
+  visibility: hidden;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* The visible animated layer. */
+.tm-layer {
+  display: inline;
+}
+
+.tm-run {
+  /* Adapters may key off [data-status="pending"|"done"] and .tm-run--keep|remove|add
+     if they want per-run styling. By default everything inherits surrounding text. */
+}
+
+/* Trailing typing cursor. It follows the active run, then stays at text end. */
+.tm-cursor {
+  display: inline-block;
+  width: clamp(2px, 0.09em, 4px);
+  height: 1.05em;
+  margin-left: 0.04em;
+  vertical-align: -0.18em;
+  background-color: currentColor;
+  border-radius: 1px;
+  animation: tm-blink 1s steps(1, end) infinite;
+}
+
+@keyframes tm-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+/* Screen-reader copy of the resolved text. */
+.tm-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Respect the user's motion preference: show a steady cursor, no blink. */
+@media (prefers-reduced-motion: reduce) {
+  .tm-cursor {
+    animation: none;
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "name": "@dev-jelly/tinytipy-solid",
+  "version": "0.1.0",
+  "description": "Solid adapter for tinytipy — diff-driven text morphing with a typing cursor. Ships JSX source compiled by the consumer's Solid pipeline.",
+  "type": "module",
+  "license": "MIT",
+  "author": "dev-jelly",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "solid": "./src/index.tsx",
+      "development": "./src/index.tsx",
+      "browser": "./src/index.tsx",
+      "import": "./src/index.tsx",
+      "default": "./src/index.tsx"
+    }
+  },
+  "files": ["src", "dist", "README.md"],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsc --emitDeclarationOnly --outDir dist",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "prepack": "pnpm run build"
+  },
+  "dependencies": {
+    "@dev-jelly/tinytipy": "workspace:*"
+  },
+  "peerDependencies": {
+    "solid-js": ">=1.8"
+  },
+  "devDependencies": {
+    "@solidjs/testing-library": "^0.8.10",
+    "jsdom": "^25.0.0",
+    "solid-js": "^1.9.0",
+    "typescript": "^5.6.0",
+    "vite": "^5.4.0",
+    "vite-plugin-solid": "^2.11.0",
+    "vitest": "^2.1.0"
+  },
+  "publishConfig": { "access": "public" },
+  "engines": { "node": ">=18" }
+}
