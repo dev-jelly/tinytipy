@@ -21,7 +21,7 @@ export function App() {
       <header className="pg-header">
         <h1>tinytipy</h1>
         <p className="pg-sub">
-          타사(오인식) → 콜라보(보정). 바뀐 부분만 지웠다가 다시 타이핑합니다.
+          변경 전 → 변경 후. 바뀐 부분만 지웠다가 다시 타이핑합니다.
         </p>
       </header>
 
@@ -60,13 +60,13 @@ export function App() {
 
       <section className="pg-raw">
         <div>
-          <h3>타사 (from)</h3>
+          <h3>변경 전 (from)</h3>
           <p className={pair.from ? undefined : 'pg-empty'}>
             {pair.from || '빈 문자열'}
           </p>
         </div>
         <div>
-          <h3>콜라보 (to)</h3>
+          <h3>변경 후 (to)</h3>
           <p>{pair.to}</p>
         </div>
       </section>

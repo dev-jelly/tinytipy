@@ -3,8 +3,7 @@
  *
  * The first pair demonstrates typing into a completely empty state. The
  * remaining pairs are real-world speech-recognition correction cases: `from`
- * is a typical third-party (타사) misrecognition, `to` is the corrected
- * (콜라보) text.
+ * is the original recognition result and `to` is the corrected text.
  *
  * Used by the example playground and as documentation of typical use cases.
  */
@@ -14,9 +13,9 @@ export interface CorrectionPair {
   id: string;
   /** Short description of the error class. */
   category: string;
-  /** Third-party misrecognition (the "before"). */
+  /** Original recognition result (the "before"). */
   from: string;
-  /** Corrected text (the "after"). */
+  /** Updated text (the "after"). */
   to: string;
 }
 
