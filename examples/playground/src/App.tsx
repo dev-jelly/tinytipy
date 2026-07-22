@@ -6,6 +6,7 @@ export function App() {
   const [index, setIndex] = useState(0);
   const [nonce, setNonce] = useState(0);
   const [reduced, setReduced] = useState(false);
+  const [inlineCursor, setInlineCursor] = useState(false);
 
   const pair = correctionPairs[index];
   if (!pair) return null;
@@ -29,6 +30,9 @@ export function App() {
         <div className="pg-meta">
           <span className="pg-tag">#{pair.id}</span>
           <span className="pg-cat">{pair.category}</span>
+          <span className="pg-layout">
+            cursor: {inlineCursor ? 'inline (legacy)' : 'overlay (default)'}
+          </span>
         </div>
 
         {/* key change => remount + autoPlay => replay */}
@@ -39,6 +43,7 @@ export function App() {
             to={pair.to}
             autoPlay
             prefersReducedMotion={reduced}
+            cursorLayout={inlineCursor ? 'inline' : undefined}
             className="pg-morph-text"
           />
         </div>
@@ -54,6 +59,14 @@ export function App() {
               onChange={(e) => setReduced(e.target.checked)}
             />
             reduced motion
+          </label>
+          <label className="pg-toggle">
+            <input
+              type="checkbox"
+              checked={inlineCursor}
+              onChange={(e) => setInlineCursor(e.target.checked)}
+            />
+            inline cursor (legacy)
           </label>
         </div>
       </section>

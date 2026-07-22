@@ -45,6 +45,9 @@ export function getRenderTokens(state: RenderState): RenderToken[] {
 /** How much of the from/to text to reserve so the box does not reflow. */
 export type ReserveLayout = 'both' | 'to' | 'from' | 'none';
 
+/** Whether the cursor overlays the text position or consumes inline space. */
+export type CursorLayout = 'overlay' | 'inline';
+
 /** The hidden reserve text(s) to render for a given reservation strategy. */
 export function getReserveTexts(
   layout: ReserveLayout,

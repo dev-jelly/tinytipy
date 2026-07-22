@@ -27,6 +27,7 @@ export {
   getReserveTexts,
 } from '@dev-jelly/tinytipy';
 export type {
+  CursorLayout,
   MorphTiming,
   RenderState,
   RenderToken,

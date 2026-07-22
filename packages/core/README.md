@@ -122,7 +122,7 @@ Import once in your app entry (any adapter):
 import '@dev-jelly/tinytipy/styles.css';
 ```
 
-Provides `.tm-root` (inline-grid), `.tm-reserve` (hidden sizer), `.tm-layer`, `.tm-run`, `.tm-cursor` (blinking, `currentColor`), and `.tm-sr-only`. The cursor follows the active edit and remains at the resolved text's end. Color inherits from surrounding text; no colors or underlines.
+Provides `.tm-root` (inline-grid), `.tm-reserve` (hidden sizer), `.tm-layer`, `.tm-run`, `.tm-cursor` (blinking, `currentColor`), and `.tm-sr-only`. Adapters set `data-cursor-layout="overlay"` on the root by default: the cursor node is a zero-width flow anchor whose positioned caret does not consume horizontal space. Set the attribute to `inline` for the legacy space-consuming cursor. Both modes follow the active edit, remain at the resolved text's end (including empty text), inherit surrounding color, and become steady under reduced motion.
 
 ## License
 

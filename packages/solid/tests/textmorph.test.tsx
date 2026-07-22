@@ -49,6 +49,24 @@ describe('TextMorph component', () => {
     expect(visibleText(container, '.tm-layer')).toBe('abc');
   });
 
+  it('defaults to overlay cursor layout', () => {
+    const { container } = render(() => <TextMorph from="a" to="b" instant />);
+    expect(container.querySelector('.tm-root')?.getAttribute('data-cursor-layout')).toBe(
+      'overlay',
+    );
+    expect(container.querySelector('.tm-cursor')?.getAttribute('aria-hidden')).toBe('true');
+  });
+
+  it('supports the legacy inline cursor layout', () => {
+    const { container } = render(() => (
+      <TextMorph from="a" to="b" instant cursorLayout="inline" />
+    ));
+    expect(container.querySelector('.tm-root')?.getAttribute('data-cursor-layout')).toBe(
+      'inline',
+    );
+    expect(container.querySelector('.tm-cursor')?.getAttribute('aria-hidden')).toBe('true');
+  });
+
   it('renders the canonical tm-root structure (reserve + layer + sr-only)', () => {
     const { container } = render(() => (
       <TextMorph from="abc" to="wxyz" autoPlay={false} />

@@ -38,7 +38,8 @@ host node, wires one controller, and patches the DOM on every snapshot:
 `use:morph` accepts the full options object: `from`, `to`, `timing?`,
 `autoPlay?` (default `true`), `instant?`, `prefersReducedMotion?`,
 `reserveLayout?` (`'both'` | `'to'` | `'from'` | `'none'`, default `'both'`),
-`onDone?`, and `class?` (appended to the root, always keeps `tm-root`). When
+`cursorLayout?` (`'overlay'` | `'inline'`, default `'overlay'`), `onDone?`, and
+`class?` (appended to the root, always keeps `tm-root`). When
 `from`/`to` change, the action calls `setPair` and replays when `autoPlay`.
 
 ## 2. Store + controls — `createTextMorph`
@@ -61,7 +62,7 @@ imperative controls:
 </script>
 
 <!-- Render whatever markup you like from $state. -->
-<span class="tm-root">
+<span class="tm-root" data-cursor-layout="overlay">
   <span class="tm-layer" aria-hidden="true">
     {#each runs as run (run.id)}
       <span class="tm-run tm-run--{run.kind}" data-status={run.status}>{run.text}</span>
@@ -107,6 +108,11 @@ Both entry points render the same canonical structure (styled by
 During editing the cursor trails the active run (core guarantees
 `cursorOffset === active run text length`), so runs are never split. Once done,
 the cursor trails the full resolved text.
+
+The default overlay mode uses a zero-width flow anchor and positioned caret, so
+it does not consume horizontal space. `inline` preserves the legacy cursor
+spacing. Both modes keep the completion and empty-text cursor, inherit
+`currentColor`, and become steady under reduced motion.
 
 ## License
 

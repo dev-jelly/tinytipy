@@ -27,6 +27,7 @@ import {
   TextMorphController,
   getRenderTokens,
   getReserveTexts,
+  type CursorLayout,
   type MorphTiming,
   type RenderState,
   type RenderToken,
@@ -171,6 +172,8 @@ export interface TextMorphProps {
    * Default `'both'`.
    */
   reserveLayout?: ReserveLayout;
+  /** Cursor layout mode. Default `'overlay'`; use `'inline'` for legacy spacing. */
+  cursorLayout?: CursorLayout;
   /** Extra class(es) appended to the root element (`tm-root` is always kept). */
   class?: string;
   /** Alias of {@link TextMorphProps.class} for React muscle memory. */
@@ -265,7 +268,7 @@ export function TextMorph(props: TextMorphProps): JSX.Element {
   });
 
   return (
-    <span class={rootClass()}>
+    <span class={rootClass()} data-cursor-layout={props.cursorLayout ?? 'overlay'}>
       <span class="tm-reserve" aria-hidden="true">
         <For each={reserveTexts()} fallback={null}>
           {(text) => <span>{text}</span>}
@@ -299,6 +302,7 @@ export {
   getReserveTexts,
 } from '@dev-jelly/tinytipy';
 export type {
+  CursorLayout,
   MorphTiming,
   RenderState,
   RenderToken,

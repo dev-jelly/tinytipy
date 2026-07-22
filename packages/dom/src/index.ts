@@ -6,7 +6,7 @@
  * shared adapter spec exactly so the canonical stylesheet
  * (`@dev-jelly/tinytipy/styles.css`) renders it correctly.
  *
- *   <span class="tm-root">
+ *   <span class="tm-root" data-cursor-layout="overlay">
  *     <span class="tm-reserve" aria-hidden="true">…reserve texts…</span>
  *     <span class="tm-layer"   aria-hidden="true">…run spans + cursor…</span>
  *     <span class="tm-sr-only">…final `to` text…</span>
@@ -17,7 +17,7 @@
  */
 
 import { TextMorphController, getRenderTokens, getReserveTexts } from '@dev-jelly/tinytipy';
-import type { MorphTiming, RenderState, ReserveLayout } from '@dev-jelly/tinytipy';
+import type { CursorLayout, MorphTiming, RenderState, ReserveLayout } from '@dev-jelly/tinytipy';
 
 /** Options accepted by {@link createTextMorph} and {@link renderTextMorph}. */
 export interface TextMorphOptions {
@@ -35,6 +35,8 @@ export interface TextMorphOptions {
   prefersReducedMotion?: boolean;
   /** How much of the from/to text to reserve so the box does not reflow. */
   reserveLayout?: ReserveLayout;
+  /** Cursor layout mode. Defaults to zero-width `overlay`; `inline` preserves legacy spacing. */
+  cursorLayout?: CursorLayout;
   /** Extra classes appended to the root element (after `tm-root`). */
   className?: string;
   /** Alias of {@link TextMorphOptions.className} for parity with HTML attrs. */
@@ -110,6 +112,7 @@ function mount(root: HTMLSpanElement, options: TextMorphOptions): TextMorphHandl
   let from = options.from;
   let to = options.to;
   let reserveLayout: ReserveLayout = options.reserveLayout ?? 'both';
+  let cursorLayout: CursorLayout = options.cursorLayout ?? 'overlay';
   let extraClass = (options.className ?? options.class ?? '').trim();
   let autoPlayFlag = options.autoPlay ?? true;
   let destroyed = false;
@@ -134,6 +137,11 @@ function mount(root: HTMLSpanElement, options: TextMorphOptions): TextMorphHandl
     root.className = composeRootClass(extraClass);
   }
   applyClassName();
+
+  function applyCursorLayout(): void {
+    root.setAttribute('data-cursor-layout', cursorLayout);
+  }
+  applyCursorLayout();
 
   /** Rebuild the reserve spans + screen-reader copy only when inputs change. */
   function renderReserve(): void {
@@ -228,11 +236,16 @@ function mount(root: HTMLSpanElement, options: TextMorphOptions): TextMorphHandl
       autoPlay,
       onDone,
       reserveLayout: newLayout,
+      cursorLayout: newCursorLayout,
       className: newClassName,
       class: newClass,
     } = opts ?? {};
 
     if (newLayout !== undefined) reserveLayout = newLayout;
+    if (newCursorLayout !== undefined) {
+      cursorLayout = newCursorLayout;
+      applyCursorLayout();
+    }
     if (newClassName !== undefined) extraClass = newClassName.trim();
     else if (newClass !== undefined) extraClass = newClass.trim();
     if (newClassName !== undefined || newClass !== undefined) applyClassName();
@@ -321,4 +334,4 @@ export function renderTextMorph(options: TextMorphOptions): RenderedTextMorph {
   };
 }
 
-export type { MorphTiming, RenderState, ReserveLayout } from '@dev-jelly/tinytipy';
+export type { CursorLayout, MorphTiming, RenderState, ReserveLayout } from '@dev-jelly/tinytipy';

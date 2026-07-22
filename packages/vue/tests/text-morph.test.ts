@@ -34,6 +34,22 @@ describe('@dev-jelly/tinytipy-vue', () => {
       expect(wrapper.find('.tm-cursor').exists()).toBe(false);
     });
 
+    it('defaults to overlay cursor layout', () => {
+      const wrapper = mount(TextMorph, {
+        props: { from: 'a', to: 'b', instant: true },
+      });
+      expect(wrapper.attributes('data-cursor-layout')).toBe('overlay');
+      expect(wrapper.find('.tm-cursor').attributes('aria-hidden')).toBe('true');
+    });
+
+    it('supports the legacy inline cursor layout', () => {
+      const wrapper = mount(TextMorph, {
+        props: { from: 'a', to: 'b', instant: true, cursorLayout: 'inline' },
+      });
+      expect(wrapper.attributes('data-cursor-layout')).toBe('inline');
+      expect(wrapper.find('.tm-cursor').attributes('aria-hidden')).toBe('true');
+    });
+
     it('keeps the root `tm-root` class and renders all three layers', () => {
       const wrapper = mount(TextMorph, {
         props: { from: 'ab', to: 'cd' },

@@ -45,6 +45,7 @@ function LiveLabel() {
 | `instant`             | `boolean`                                         | `false`     | Skip animation, jump straight to `to`.                                |
 | `prefersReducedMotion`| `boolean`                                         | auto-detect | Force reduced-motion behaviour.                                       |
 | `reserveLayout`       | `'both' \| 'to' \| 'from' \| 'none'`              | `'both'`    | Hidden reserve text to prevent reflow.                                |
+| `cursorLayout`        | `'overlay' \| 'inline'`                            | `'overlay'` | Zero-width overlay cursor or legacy inline cursor.                    |
 | `class` / `className` | `string`                                          | —           | Appended to the root element (`tm-root` is always kept).              |
 | `onDone`              | `() => void`                                      | —           | Fires once when the morph reaches `to`.                               |
 | `controllerRef`       | `(c: TextMorphController) => void`                | —           | Receive the underlying controller for imperative control on mount.    |
@@ -104,7 +105,7 @@ If you use `createTextMorph` directly and build your own DOM, follow the
 canonical structure so the canonical stylesheet works:
 
 ```html
-<span class="tm-root">
+<span class="tm-root" data-cursor-layout="overlay">
   <span class="tm-reserve" aria-hidden="true"><!-- reserve text(s) --></span>
   <span class="tm-layer" aria-hidden="true">
     <!-- one node per token from getRenderTokens(state) -->
@@ -119,6 +120,11 @@ Use `getRenderTokens(state)` from `@dev-jelly/tinytipy` to get an ordered list
 (`run` and `cursor` tokens — the cursor follows the active run, then the full
 resolved text) and `getReserveTexts(reserveLayout, from, to)` for the reserve
 layer.
+
+The default overlay mode uses a zero-width flow anchor and positioned caret, so
+it adds no horizontal advance. Set `cursorLayout="inline"` for the legacy
+space-consuming cursor. Completion, empty-text rendering, `currentColor`, and
+reduced-motion behavior are unchanged in both modes.
 
 ## Package shape
 

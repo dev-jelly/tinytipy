@@ -58,6 +58,7 @@ function correct() {
 | `instant`             | `boolean`                                        | `undefined` | Skip straight to `to`.                             |
 | `prefersReducedMotion`| `boolean`                                        | `undefined` | Force on/off; omit to auto-detect via `matchMedia`. |
 | `reserveLayout`       | `'both' \| 'to' \| 'from' \| 'none'`             | `'both'`    | Hidden reserve text(s) to prevent reflow.          |
+| `cursorLayout`        | `'overlay' \| 'inline'`                           | `'overlay'` | Zero-width overlay cursor or legacy inline cursor. |
 | `onDone`              | `() => void`                                     | `undefined` | Fires once when the morph reaches `to`.            |
 
 A `class` / `style` / attrs passthrough lands on the root `.tm-root` element
@@ -118,7 +119,7 @@ re-plans on changes, and destroys it when the owning scope is disposed
 The component renders (styled by `@dev-jelly/tinytipy/styles.css`):
 
 ```html
-<span class="tm-root">
+<span class="tm-root" data-cursor-layout="overlay">
   <span class="tm-reserve" aria-hidden="true">…</span>
   <span class="tm-layer" aria-hidden="true">
     <span class="tm-run tm-run--{kind}" data-status="{status}">…</span>
@@ -131,7 +132,10 @@ The component renders (styled by `@dev-jelly/tinytipy/styles.css`):
 
 The cursor trails the active run while editing and the full resolved text when
 done; the reserve layer sizes the box to prevent layout shift; `.tm-sr-only`
-always holds the final `to` text for assistive tech.
+always holds the final `to` text for assistive tech. Overlay is the default and
+does not consume horizontal space; `inline` preserves the legacy cursor spacing.
+Both modes support empty resolved text, inherit `currentColor`, and become steady
+under reduced motion.
 
 ## License
 

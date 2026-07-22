@@ -59,6 +59,11 @@ body {
   border-radius: 999px;
 }
 .pg-cat { color: var(--muted); font-size: 14px; }
+.pg-layout {
+  margin-left: auto;
+  color: var(--muted);
+  font-size: 12px;
+}
 
 .pg-morph {
   font-size: 22px;
@@ -94,6 +99,7 @@ body {
   font-size: 13px;
   cursor: pointer;
 }
+.pg-toggle + .pg-toggle { margin-left: 0; }
 
 .pg-raw {
   margin-top: 22px;

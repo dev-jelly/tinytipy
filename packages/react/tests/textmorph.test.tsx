@@ -26,6 +26,25 @@ describe('@dev-jelly/tinytipy-react <TextMorph>', () => {
     expect(layerText(container)).toBe('abc');
   });
 
+  it('defaults to overlay cursor layout and keeps a cursor for empty resolved text', () => {
+    const { container } = render(<TextMorph from="a" to="" instant />);
+    const root = container.querySelector('.tm-root');
+    const cursor = container.querySelector('.tm-cursor');
+    expect(root?.getAttribute('data-cursor-layout')).toBe('overlay');
+    expect(cursor?.getAttribute('aria-hidden')).toBe('true');
+    expect(container.querySelector('.tm-layer')?.lastElementChild).toBe(cursor);
+  });
+
+  it('supports the legacy inline cursor layout', () => {
+    const { container } = render(
+      <TextMorph from="a" to="b" instant cursorLayout="inline" />,
+    );
+    expect(container.querySelector('.tm-root')?.getAttribute('data-cursor-layout')).toBe(
+      'inline',
+    );
+    expect(container.querySelector('.tm-cursor')?.getAttribute('aria-hidden')).toBe('true');
+  });
+
   it('animates to `to` and fires onDone once after timers flush', () => {
     const onDone = vi.fn();
     const { container } = render(<TextMorph from="abc" to="xyz" onDone={onDone} />);

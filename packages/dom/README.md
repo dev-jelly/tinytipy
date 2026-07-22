@@ -37,6 +37,7 @@ const handle = createTextMorph(host, {
   to: '기온',
   className: 'title',          // appended after `tm-root`
   reserveLayout: 'both',       // 'both' | 'to' | 'from' | 'none' (default 'both')
+  cursorLayout: 'overlay',     // 'overlay' (default) | 'inline' (legacy spacing)
   onDone: () => console.log('settled'),
 });
 
@@ -70,7 +71,7 @@ destroy();
 ## Rendered structure
 
 ```html
-<span class="tm-root">
+<span class="tm-root" data-cursor-layout="overlay">
   <span class="tm-reserve" aria-hidden="true"><!-- reserve text(s) --></span>
   <span class="tm-layer" aria-hidden="true">
     <span class="tm-run tm-run--{kind}" data-status="{status}">{text}</span>
@@ -86,6 +87,10 @@ destroy();
 - `.tm-sr-only` always carries the **final** `to` text for screen readers.
 - The cursor is a single trailing node appended after the active run while
   editing, then after all runs once the text resolves.
+- Overlay uses a zero-width flow anchor and positioned caret, so it adds no
+  horizontal advance. `inline` preserves the legacy space-consuming cursor.
+  Both modes support empty text, inherit `currentColor`, and become steady under
+  reduced motion.
 
 ## Options
 
@@ -97,5 +102,6 @@ destroy();
 | `instant`              | `boolean`                             | —       | Skip straight to `to`.                             |
 | `prefersReducedMotion` | `boolean`                             | auto    | Force reduced-motion (skip to final).              |
 | `reserveLayout`        | `'both' \| 'to' \| 'from' \| 'none'`  | `'both'`| Reflow reservation strategy.                       |
+| `cursorLayout`         | `'overlay' \| 'inline'`                | `'overlay'` | Zero-width overlay or legacy inline cursor.    |
 | `className` / `class`  | `string`                              | —       | Extra classes on the root (after `tm-root`).       |
 | `onDone`               | `() => void`                          | —       | Fires once when the morph reaches `to`.            |

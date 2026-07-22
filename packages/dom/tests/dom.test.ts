@@ -27,6 +27,19 @@ describe('createTextMorph', () => {
     expect(layerText(host)).toBe('hello');
   });
 
+  it('defaults to overlay and retains cursor layout across partial setPair updates', () => {
+    const host = document.createElement('div');
+    const handle = createTextMorph(host, { from: 'a', to: 'b', instant: true });
+    const root = host.querySelector('.tm-root')!;
+    expect(root.getAttribute('data-cursor-layout')).toBe('overlay');
+    expect(root.querySelector('.tm-cursor')?.getAttribute('aria-hidden')).toBe('true');
+
+    handle.setPair('b', 'c', { cursorLayout: 'inline', instant: true });
+    expect(root.getAttribute('data-cursor-layout')).toBe('inline');
+    handle.setPair('c', 'd', { instant: true });
+    expect(root.getAttribute('data-cursor-layout')).toBe('inline');
+  });
+
   it('appends the extra className onto the root (keeping tm-root)', () => {
     const host = document.createElement('div');
     createTextMorph(host, { from: 'a', to: 'b', className: 'big  bold' });

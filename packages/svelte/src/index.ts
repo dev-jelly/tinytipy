@@ -27,6 +27,7 @@ import {
   getRenderTokens,
   getReserveTexts,
   type ControllerOptions,
+  type CursorLayout,
   type MorphTiming,
   type RenderState,
   type ReserveLayout,
@@ -45,6 +46,8 @@ export interface TextMorphOptions {
   prefersReducedMotion?: boolean;
   /** Which hidden strings to render in the reserve layer. @default 'both' */
   reserveLayout?: ReserveLayout;
+  /** Cursor layout mode. @default 'overlay' */
+  cursorLayout?: CursorLayout;
   /** Extra class(es) appended to the root element (always keeps `tm-root`). */
   class?: string;
   /** Fired once when the morph reaches the final (`to`) state. */
@@ -79,9 +82,14 @@ export interface MorphActionHandle {
 }
 
 const DEFAULT_RESERVE_LAYOUT: ReserveLayout = 'both';
+const DEFAULT_CURSOR_LAYOUT: CursorLayout = 'overlay';
 
 function resolveReserveLayout(layout: ReserveLayout | undefined): ReserveLayout {
   return layout ?? DEFAULT_RESERVE_LAYOUT;
+}
+
+function resolveCursorLayout(layout: CursorLayout | undefined): CursorLayout {
+  return layout ?? DEFAULT_CURSOR_LAYOUT;
 }
 
 /**
@@ -246,6 +254,7 @@ export function createTextMorph(options: TextMorphOptions): TextMorphHandle {
  */
 export function morphAction(node: HTMLElement, options: TextMorphOptions): MorphActionHandle {
   node.classList.add('tm-root');
+  node.setAttribute('data-cursor-layout', resolveCursorLayout(options.cursorLayout));
 
   const reserve = document.createElement('span');
   reserve.className = 'tm-reserve';
@@ -349,6 +358,9 @@ export function morphAction(node: HTMLElement, options: TextMorphOptions): Morph
       if (reserveChanged) renderReserve();
 
       if (next.class !== current.class) applyClass(next.class);
+      if (resolveCursorLayout(next.cursorLayout) !== resolveCursorLayout(current.cursorLayout)) {
+        node.setAttribute('data-cursor-layout', resolveCursorLayout(next.cursorLayout));
+      }
 
       current = next;
     },
@@ -361,6 +373,7 @@ export function morphAction(node: HTMLElement, options: TextMorphOptions): Morph
       if (layer.parentNode === node) node.removeChild(layer);
       if (srOnly.parentNode === node) node.removeChild(srOnly);
       node.classList.remove('tm-root');
+      node.removeAttribute('data-cursor-layout');
     },
   };
 }
@@ -370,6 +383,7 @@ export { morphAction as morph };
 
 // Re-export the core types users commonly need alongside this adapter.
 export type {
+  CursorLayout,
   RenderState,
   MorphTiming,
   ReserveLayout,

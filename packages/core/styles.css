@@ -10,7 +10,7 @@
  * whatever text styles surround it.
  *
  * Adapters render this structure:
- *   <span class="tm-root">
+ *   <span class="tm-root" data-cursor-layout="overlay">
  *     <span class="tm-reserve" aria-hidden="true">{reserve text}</span>
  *     <span class="tm-layer" aria-hidden="true">
  *       <span class="tm-run tm-run--{kind}" data-status="{status}">{text}</span>
@@ -54,16 +54,43 @@
      if they want per-run styling. By default everything inherits surrounding text. */
 }
 
-/* Trailing typing cursor. It follows the active run, then stays at text end. */
+/* The default cursor is a zero-width flow anchor. Its positioned pseudo-element
+   paints the caret without adding horizontal advance or shifting nearby text. */
 .tm-cursor {
   display: inline-block;
-  width: clamp(2px, 0.09em, 4px);
+  position: relative;
+  width: 0;
   height: 1.05em;
-  margin-left: 0.04em;
+  margin: 0;
+  padding: 0;
+  border: 0;
   vertical-align: -0.18em;
+}
+
+.tm-cursor::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0.04em;
+  width: clamp(2px, 0.09em, 4px);
+  height: 100%;
   background-color: currentColor;
   border-radius: 1px;
   animation: tm-blink 1s steps(1, end) infinite;
+}
+
+/* Compatibility mode: preserve the original space-consuming inline cursor. */
+.tm-root[data-cursor-layout="inline"] .tm-cursor {
+  position: static;
+  width: clamp(2px, 0.09em, 4px);
+  margin-left: 0.04em;
+  background-color: currentColor;
+  border-radius: 1px;
+  animation: tm-blink 1s steps(1, end) infinite;
+}
+
+.tm-root[data-cursor-layout="inline"] .tm-cursor::after {
+  content: none;
 }
 
 @keyframes tm-blink {
@@ -86,7 +113,8 @@
 
 /* Respect the user's motion preference: show a steady cursor, no blink. */
 @media (prefers-reduced-motion: reduce) {
-  .tm-cursor {
+  .tm-cursor::after,
+  .tm-root[data-cursor-layout="inline"] .tm-cursor {
     animation: none;
   }
 }

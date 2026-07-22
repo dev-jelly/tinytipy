@@ -2,6 +2,7 @@ import { defineComponent, h, type PropType } from 'vue';
 import {
   getRenderTokens,
   getReserveTexts,
+  type CursorLayout,
   type MorphTiming,
   type RenderState,
   type ReserveLayout,
@@ -18,6 +19,7 @@ export interface TextMorphProps {
   instant?: boolean;
   prefersReducedMotion?: boolean;
   reserveLayout?: ReserveLayout;
+  cursorLayout?: CursorLayout;
   onDone?: () => void;
 }
 
@@ -30,6 +32,7 @@ export interface TextMorphExposed {
 }
 
 const RESERVE_LAYOUTS: readonly ReserveLayout[] = ['both', 'to', 'from', 'none'];
+const CURSOR_LAYOUTS: readonly CursorLayout[] = ['overlay', 'inline'];
 
 function renderToken(token: RenderToken) {
   if (token.type === 'cursor') {
@@ -51,7 +54,7 @@ function renderToken(token: RenderToken) {
  * Renders this structure (styled by `@dev-jelly/tinytipy/styles.css`):
  *
  * ```html
- * <span class="tm-root">
+ * <span class="tm-root" data-cursor-layout="overlay">
  *   <span class="tm-reserve" aria-hidden="true">…reserve spans…</span>
  *   <span class="tm-layer" aria-hidden="true">
  *     <span class="tm-run tm-run--{kind}" data-status="{status}">…</span>
@@ -86,6 +89,11 @@ export const TextMorph = defineComponent({
       default: 'both',
       validator: (value: ReserveLayout) => RESERVE_LAYOUTS.includes(value),
     },
+    cursorLayout: {
+      type: String as PropType<CursorLayout>,
+      default: 'overlay',
+      validator: (value: CursorLayout) => CURSOR_LAYOUTS.includes(value),
+    },
     onDone: { type: Function as PropType<(() => void) | undefined>, default: undefined },
   },
   setup(props, { expose }) {
@@ -115,7 +123,7 @@ export const TextMorph = defineComponent({
         props.to,
       ).map((text) => h('span', text));
 
-      return h('span', { class: 'tm-root' }, [
+      return h('span', { class: 'tm-root', 'data-cursor-layout': props.cursorLayout }, [
         h('span', { class: 'tm-reserve', 'aria-hidden': 'true' }, reserveChildren),
         h('span', { class: 'tm-layer', 'aria-hidden': 'true' }, layerChildren),
         h('span', { class: 'tm-sr-only' }, props.to),

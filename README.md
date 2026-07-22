@@ -8,7 +8,7 @@ Given two strings, tinytipy diffs them, then animates the transition — erasing
 
 - 🎯 **Only the diffs move** — unchanged text is never re-typed.
 - ⌨️ **Korean IME composition** — `최근` types as `ㅊ → 최 → 최ㄱ → 최그 → 최근`.
-- ✨ **Live trailing cursor** — a substantial caret follows each edit, then keeps blinking at the end.
+- ✨ **Live trailing cursor** — an overlay caret follows each edit without shifting text, then keeps blinking at the end.
 - 🧩 **One core, every framework** — React, Vue, Svelte, Solid, and vanilla DOM adapters. Import only what you use.
 - 🪶 **Tiny & tree-shakeable** — framework-agnostic core, side-effect-free adapters, and an explicitly preserved stylesheet.
 - ♿ **Accessible by default** — screen-reader text + `prefers-reduced-motion` support.
@@ -116,7 +116,14 @@ const api = createTextMorph(el, { from: '3초', to: '300ms' });
 | `instant`             | `boolean`                             | `false`  | Skip the animation; jump straight to `to`.               |
 | `prefersReducedMotion`| `boolean`                             | auto     | Force reduced-motion (jump to `to`). Auto-detected otherwise. |
 | `reserveLayout`       | `'both' \| 'to' \| 'from' \| 'none'`  | `'both'` | Reserve box size to prevent reflow.                      |
+| `cursorLayout`        | `'overlay' \| 'inline'`                | `'overlay'` | Zero-width overlay caret, or legacy space-consuming inline caret. |
 | `onDone`              | `() => void`                          | —        | Fires once when the morph reaches `to`.                  |
+
+The default overlay cursor uses a zero-width flow anchor and a positioned caret,
+so it does not add horizontal advance. Use `cursorLayout="inline"` for the
+legacy space-consuming cursor. Both modes follow the active edit, remain at the
+resolved text end (including empty text), inherit `currentColor`, and become
+steady under reduced motion.
 
 ### Timing (`MorphTiming`)
 
@@ -154,7 +161,7 @@ examples/
 2. **`buildCompositionFrames(text)`** — splits Korean syllables into 초성 → 초중성 → 완성 frames; one frame per non-Korean grapheme.
 3. **`planMorph(opts)`** — a **pure** description of the animation: an initial snapshot (renders `from`), a final snapshot (renders `to`), and the timed steps between.
 4. **`TextMorphController`** — schedules the plan with `setTimeout`, notifies subscribers, reacts to reduced-motion. The only stateful piece.
-5. **Adapters** — bind the controller to each framework and render the snapshot via the shared `getRenderTokens()` helper. The cursor follows the active edit and remains at the end after completion.
+5. **Adapters** — bind the controller to each framework and render the snapshot via the shared `getRenderTokens()` helper. Each root resolves `data-cursor-layout="overlay"` by default; the cursor follows the active edit and remains at the end after completion.
 
 ## Why only the diffs move
 

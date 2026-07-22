@@ -32,7 +32,7 @@ snapshot — never schedule timers inside an adapter.**
 Given a `RenderState`, render this exact structure:
 
 ```html
-<span class="tm-root">
+<span class="tm-root" data-cursor-layout="overlay">
   <span class="tm-reserve" aria-hidden="true">  <!-- reserve text (see below) --></span>
   <span class="tm-layer" aria-hidden="true">
     <!-- one <span class="tm-run ..."> per run, in order -->
@@ -62,11 +62,16 @@ Rules:
    - `'from'`: render only `from`.
    - `'none'`: render nothing in the reserve layer.
    The reserve layer is `aria-hidden` and `visibility:hidden` (handled by CSS).
-4. **Accessibility**: `.tm-sr-only` always contains the FINAL `to` text. The
+4. **Cursor layout** (`cursorLayout` prop, default `'overlay'`): set the resolved
+   value on `.tm-root` as `data-cursor-layout="overlay|inline"`. Overlay uses the
+   canonical zero-width flow anchor and absolutely positioned caret so it adds
+   no horizontal advance. `inline` preserves the legacy space-consuming cursor.
+   Both modes keep active-edit, completion, and empty-text placement.
+5. **Accessibility**: `.tm-sr-only` always contains the FINAL `to` text. The
    reserve and animated layers are `aria-hidden="true"`. Reduced-motion users get
    the final state immediately (core handles this; the adapter just renders
    whatever snapshot it receives).
-5. **Styles**: ship/import `@dev-jelly/tinytipy/styles.css` (the canonical stylesheet).
+6. **Styles**: ship/import `@dev-jelly/tinytipy/styles.css` (the canonical stylesheet).
    Do not inline styles in adapters beyond what the spec requires. Document the
    one-time CSS import in each adapter's README.
 
@@ -75,6 +80,7 @@ Rules:
 - A **component** named `TextMorph`:
   - props/attrs: `from`, `to`, `timing?`, `autoPlay?` (default `true`),
     `instant?`, `prefersReducedMotion?`, `reserveLayout?` (`'both'|'to'|'from'|'none'`, default `'both'`),
+    `cursorLayout?` (`'overlay'|'inline'`, default `'overlay'`),
     `class?`/`className?` (merged onto root), `onDone?`, `play?`/`as?` only if trivial.
   - When `from`/`to` change, the controller calls `setPair` automatically.
   - Cleans up the controller on unmount/destroy.

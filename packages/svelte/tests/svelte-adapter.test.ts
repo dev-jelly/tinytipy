@@ -141,6 +141,19 @@ describe('morphAction (use:morph)', () => {
     handle.destroy();
   });
 
+  it('defaults to overlay and updates to the legacy inline cursor layout', () => {
+    const host = document.createElement('span');
+    const handle = morphAction(host, { from: 'a', to: 'b', instant: true });
+    expect(host.getAttribute('data-cursor-layout')).toBe('overlay');
+    expect(host.querySelector('.tm-cursor')?.getAttribute('aria-hidden')).toBe('true');
+
+    handle.update({ from: 'a', to: 'b', instant: true, cursorLayout: 'inline' });
+    expect(host.getAttribute('data-cursor-layout')).toBe('inline');
+
+    handle.destroy();
+    expect(host.hasAttribute('data-cursor-layout')).toBe(false);
+  });
+
   it('animates to `to` as time advances', () => {
     const host = document.createElement('span');
     const handle = morphAction(host, {

@@ -11,12 +11,13 @@ import {
   getRenderTokens,
   getReserveTexts,
   planMorph,
+  type CursorLayout,
   type MorphTiming,
   type RenderState,
   type ReserveLayout,
 } from '@dev-jelly/tinytipy';
 
-export type { MorphTiming, RenderState, ReserveLayout, RenderToken } from '@dev-jelly/tinytipy';
+export type { CursorLayout, MorphTiming, RenderState, ReserveLayout, RenderToken } from '@dev-jelly/tinytipy';
 export { TextMorphController, getRenderTokens, getReserveTexts, planMorph } from '@dev-jelly/tinytipy';
 
 /** Props for the {@link TextMorph} component. */
@@ -28,6 +29,7 @@ export interface TextMorphProps {
   instant?: boolean;
   prefersReducedMotion?: boolean;
   reserveLayout?: ReserveLayout;
+  cursorLayout?: CursorLayout;
   onDone?: () => void;
   /** Extra class(es) appended to the root element (which always keeps `tm-root`). */
   className?: string;
@@ -42,7 +44,7 @@ export interface TextMorphHandle {
 }
 
 /** Options accepted by {@link useTextMorph}. */
-export type UseTextMorphOptions = Omit<TextMorphProps, 'className' | 'reserveLayout'>;
+export type UseTextMorphOptions = Omit<TextMorphProps, 'className' | 'reserveLayout' | 'cursorLayout'>;
 
 /** Return value of {@link useTextMorph}. */
 export interface UseTextMorphReturn {
@@ -154,13 +156,14 @@ export function renderMorph(
   to: string,
   reserveLayout: ReserveLayout,
   className?: string,
+  cursorLayout: CursorLayout = 'overlay',
 ): ReactElement {
   const tokens = getRenderTokens(state);
   const reserve = getReserveTexts(reserveLayout, from, to);
   const rootClass = className ? `tm-root ${className}` : 'tm-root';
 
   return (
-    <span className={rootClass}>
+    <span className={rootClass} data-cursor-layout={cursorLayout}>
       <span className="tm-reserve" aria-hidden="true">
         {reserve.map((text, i) => (
           <span key={i}>{text}</span>
@@ -191,10 +194,17 @@ export function renderMorph(
  * controls (play/pause/reset/finish) are available via a {@link TextMorphHandle} ref.
  */
 export const TextMorph = forwardRef<TextMorphHandle, TextMorphProps>(function TextMorph(
-  { reserveLayout = 'both', className, ...hookOptions },
+  { reserveLayout = 'both', cursorLayout = 'overlay', className, ...hookOptions },
   ref,
 ) {
   const { state, play, pause, reset, finish } = useTextMorph(hookOptions);
   useImperativeHandle(ref, () => ({ play, pause, reset, finish }), [play, pause, reset, finish]);
-  return renderMorph(state, hookOptions.from, hookOptions.to, reserveLayout, className);
+  return renderMorph(
+    state,
+    hookOptions.from,
+    hookOptions.to,
+    reserveLayout,
+    className,
+    cursorLayout,
+  );
 });

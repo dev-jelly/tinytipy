@@ -40,6 +40,7 @@ export function Demo() {
 | `instant`             | `boolean`                             | `false`  | Jump straight to `to`.                                   |
 | `prefersReducedMotion`| `boolean`                             | auto     | Force reduced-motion.                                    |
 | `reserveLayout`       | `'both' \| 'to' \| 'from' \| 'none'`  | `'both'` | Reserve box size to prevent reflow.                      |
+| `cursorLayout`        | `'overlay' \| 'inline'`                | `'overlay'` | Zero-width overlay cursor or legacy inline cursor.       |
 | `onDone`              | `() => void`                          | —        | Fires once when the morph reaches `to`.                  |
 | `className`           | `string`                              | —        | Extra class on the root (root always keeps `tm-root`).   |
 
@@ -67,6 +68,7 @@ function Custom() {
 - The controller is created inside a mount effect, so it is StrictMode-safe.
 - The first render is seeded from a pure plan — SSR and first paint show `from` with no flash.
 - `onDone` always calls the latest callback (no stale closures).
+- The root exposes the resolved mode as `data-cursor-layout`; overlay does not consume horizontal space, while `inline` preserves the legacy spacing. Both modes keep the completion and empty-text cursor, inherit `currentColor`, and become steady under reduced motion.
 
 ## License
 
