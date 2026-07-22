@@ -23,8 +23,8 @@ Grapheme-level LCS diff. Returns ordered segments:
 ```ts
 type Segment = { type: 'equal' | 'delete' | 'insert'; text: string };
 
-diffText('자글로', '다글로');
-// => [ { type: 'delete', text: '자' }, { type: 'insert', text: '다' }, { type: 'equal', text: '글로' } ]
+diffText('기운', '기온');
+// => [ { type: 'equal', text: '기' }, { type: 'delete', text: '운' }, { type: 'insert', text: '온' } ]
 ```
 
 Shared substrings survive as `equal`, so only genuinely changed regions need animating. Operates on grapheme clusters (emoji-safe) via `Intl.Segmenter`.

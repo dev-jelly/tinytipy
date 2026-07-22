@@ -146,7 +146,7 @@ packages/
   solid/    # createTextMorph + <TextMorph/>
   dom/      # createTextMorph(el, opts)
 examples/
-  data/pairs.ts   # 18 demos, including empty-state typing
+  data/pairs.ts   # 17 demos, including empty-state typing
   playground/     # Vite + React demo
 ```
 
