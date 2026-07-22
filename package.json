@@ -1,6 +1,6 @@
 {
   "name": "tinytipy",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "description": "Diff-driven text morphing: animate only the changed parts when morphing text from A to B, with a typing cursor. Framework-agnostic core + React/Vue/Svelte/Solid/DOM adapters.",
   "type": "module",

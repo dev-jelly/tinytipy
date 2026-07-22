@@ -1,6 +1,6 @@
 {
   "name": "@dev-jelly/tinytipy",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Framework-agnostic core for tinytipy: grapheme diff, Korean IME composition frames, and a pure morph planner.",
   "type": "module",
   "license": "MIT",

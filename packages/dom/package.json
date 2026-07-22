@@ -1,6 +1,6 @@
 {
   "name": "@dev-jelly/tinytipy-dom",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Vanilla DOM adapter for tinytipy — diff-driven text morphing with a typing cursor, no framework.",
   "type": "module",
   "license": "MIT",
