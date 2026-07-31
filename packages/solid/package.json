@@ -1,6 +1,6 @@
 {
   "name": "@dev-jelly/tinytipy-solid",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Solid adapter for tinytipy — diff-driven text morphing with a typing cursor. Ships JSX source compiled by the consumer's Solid pipeline.",
   "type": "module",
   "license": "MIT",

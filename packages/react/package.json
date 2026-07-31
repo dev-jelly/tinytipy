@@ -1,6 +1,6 @@
 {
   "name": "@dev-jelly/tinytipy-react",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "React adapter for tinytipy — diff-driven text morphing with a typing cursor.",
   "type": "module",
   "license": "MIT",

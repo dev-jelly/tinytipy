@@ -1,6 +1,6 @@
 {
   "name": "@dev-jelly/tinytipy-svelte",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Svelte adapter for tinytipy — diff-driven text morphing with a typing cursor (store + action, Svelte 4 & 5).",
   "type": "module",
   "license": "MIT",
