@@ -37,11 +37,17 @@
   grid-area: 1 / 1;
 }
 
-/* Invisible copy used only to reserve the final box (prevents reflow). */
+/* Invisible copies used only to reserve the largest from/to box. Candidate
+   texts overlap so their widths and heights are not added together. */
 .tm-reserve {
+  display: grid;
   visibility: hidden;
   pointer-events: none;
   user-select: none;
+}
+
+.tm-reserve > span {
+  grid-area: 1 / 1;
 }
 
 /* The visible animated layer. */

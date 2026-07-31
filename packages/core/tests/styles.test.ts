@@ -3,7 +3,14 @@ import { describe, expect, it } from 'vitest';
 
 const styles = readFileSync(new URL('../styles.css', import.meta.url), 'utf8');
 
-describe('canonical cursor styles', () => {
+describe('canonical styles', () => {
+  it('overlaps reserve candidates so the root uses their maximum size', () => {
+    expect(styles).toMatch(/\.tm-reserve\s*\{[^}]*display:\s*grid;/s);
+    expect(styles).toMatch(
+      /\.tm-reserve\s*>\s*span\s*\{[^}]*grid-area:\s*1\s*\/\s*1;/s,
+    );
+  });
+
   it('uses a zero-width anchor and absolutely positioned overlay caret', () => {
     expect(styles).toMatch(/\.tm-cursor\s*\{[^}]*width:\s*0;/s);
     expect(styles).toMatch(/\.tm-cursor::after\s*\{[^}]*position:\s*absolute;/s);

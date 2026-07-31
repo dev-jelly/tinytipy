@@ -56,8 +56,8 @@ Rules:
    plus `data-status="{status}"` (`pending` | `done`).
 3. **Layout reservation** (`reserveLayout` prop, default `'both'`): render the
    reserve layer so the container does not reflow during the animation.
-   - `'both'`: render BOTH `from` and `to` inside `.tm-reserve` (two stacked
-     hidden spans) → box stays at least max(from, to).
+   - `'both'`: render BOTH `from` and `to` inside `.tm-reserve` (two overlapping
+     hidden spans) → box stays at least max(from, to) without adding their sizes.
    - `'to'`: render only `to`.
    - `'from'`: render only `from`.
    - `'none'`: render nothing in the reserve layer.
