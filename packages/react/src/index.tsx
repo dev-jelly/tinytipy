@@ -136,8 +136,9 @@ export function useTextMorph(options: UseTextMorphOptions): UseTextMorphReturn {
     if (lastTimingRef.current === key) return;
     lastTimingRef.current = key;
     controller.setTiming(timing ?? {});
+    if (autoPlay) controller.play();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [timing]);
+  }, [timing, autoPlay]);
 
   return {
     state,

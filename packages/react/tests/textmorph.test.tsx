@@ -107,6 +107,38 @@ describe('@dev-jelly/tinytipy-react <TextMorph>', () => {
     expect(layerText(container)).toBe('abcdef');
   });
 
+  it('replays from the start when timing changes and autoPlay is on', () => {
+    const slow = {
+      initialDelayMs: 10_000,
+      hunkDelayMs: 0,
+      erasePerCharMs: 0,
+      pauseBeforeTypingMs: 0,
+      typePerFrameMs: 10_000,
+      settleMs: 0,
+    };
+    const fast = {
+      initialDelayMs: 0,
+      hunkDelayMs: 0,
+      erasePerCharMs: 0,
+      pauseBeforeTypingMs: 0,
+      typePerFrameMs: 1,
+      settleMs: 0,
+    };
+    const { container, rerender } = render(
+      <TextMorph from="abc" to="xyz" timing={slow} />,
+    );
+    act(() => {
+      vi.advanceTimersByTime(500);
+    });
+    expect(layerText(container)).toBe('abc');
+
+    rerender(<TextMorph from="abc" to="xyz" timing={fast} />);
+    act(() => {
+      vi.runAllTimers();
+    });
+    expect(layerText(container)).toBe('xyz');
+  });
+
   it('forwards from/to changes when props update', () => {
     const { container, rerender } = render(<TextMorph from="abc" to="xyz" />);
     act(() => {

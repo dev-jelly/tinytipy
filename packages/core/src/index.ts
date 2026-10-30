@@ -16,12 +16,16 @@ export { TextMorphController } from './controller';
 export type { ControllerOptions } from './controller';
 export { prefersReducedMotion, onReducedMotionChange } from './reduced-motion';
 export { defaultTiming, resolveTiming, clampMs } from './timing';
+export { EASE_NAMES, resolveEasing, easingFunction, easeDelays } from './easing';
 export { graphemes, graphemeLength } from './graphemes';
 export { getRenderTokens, getReserveTexts } from './render';
 export type { CursorLayout, RenderToken, ReserveLayout } from './render';
 
 export type {
   CursorAnchor,
+  MorphCubicBezier,
+  MorphEaseName,
+  MorphEasing,
   MorphOptions,
   MorphPlan,
   MorphStep,

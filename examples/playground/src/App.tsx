@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { EASE_NAMES, type MorphEaseName } from '@dev-jelly/tinytipy';
 import { TextMorph } from '@dev-jelly/tinytipy-react';
 import { correctionPairs } from '../../data/pairs';
 
@@ -7,8 +8,10 @@ export function App() {
   const [nonce, setNonce] = useState(0);
   const [reduced, setReduced] = useState(false);
   const [inlineCursor, setInlineCursor] = useState(false);
+  const [easing, setEasing] = useState<MorphEaseName>('linear');
 
   const pair = correctionPairs[index];
+  const timing = easing === 'linear' ? undefined : { easing };
   if (!pair) return null;
 
   const go = (delta: number) => {
@@ -16,6 +19,10 @@ export function App() {
     setNonce((n) => n + 1);
   };
   const replay = () => setNonce((n) => n + 1);
+  const changeEasing = (next: MorphEaseName) => {
+    setEasing(next);
+    if (next !== easing) setNonce((n) => n + 1);
+  };
 
   return (
     <main className="pg">
@@ -42,6 +49,7 @@ export function App() {
             from={pair.from}
             to={pair.to}
             autoPlay
+            timing={timing}
             prefersReducedMotion={reduced}
             cursorLayout={inlineCursor ? 'inline' : undefined}
             className="pg-morph-text"
@@ -68,6 +76,21 @@ export function App() {
             />
             inline cursor (legacy)
           </label>
+          <div className="pg-easing" role="group" aria-label="트랜지션 타이밍">
+            <span className="pg-easing-label">timing</span>
+            {EASE_NAMES.map((name) => (
+              <button
+                key={name}
+                type="button"
+                aria-pressed={name === easing}
+                className={name === easing ? 'is-active' : undefined}
+                disabled={reduced}
+                onClick={() => changeEasing(name)}
+              >
+                {name}
+              </button>
+            ))}
+          </div>
         </div>
       </section>
 

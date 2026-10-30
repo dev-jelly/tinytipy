@@ -1,5 +1,6 @@
 import { buildCompositionFrames } from './composition';
 import { diffText } from './diff';
+import { easeDelays, isLinearEasing } from './easing';
 import { graphemes } from './graphemes';
 import { resolveTiming } from './timing';
 import type {
@@ -34,8 +35,9 @@ interface PlannedRun {
  *
  * The first edit waits `initialDelayMs`; subsequent removes wait `hunkDelayMs`
  * (the "mark"); an add that directly follows a remove waits
- * `pauseBeforeTypingMs` instead. The plan is a pure value — the controller
- * only schedules it.
+ * `pauseBeforeTypingMs` instead. When `timing.easing` is not `linear`, those
+ * delays are redistributed over the same total duration. The plan is a pure
+ * value — the controller only schedules it.
  */
 export function planMorph(options: MorphOptions): MorphPlan {
   const timing: MorphTiming = resolveTiming(options.timing);
@@ -152,6 +154,20 @@ export function planMorph(options: MorphOptions): MorphPlan {
   // Final settle resolves `done` and clears the active-run cursor anchor.
   // Renderers derive a completion cursor at the end of the resolved text.
   steps.push({ delayMs: timing.settleMs, state: snapshot(texts, null, true) });
+
+  if (!isLinearEasing(timing.easing)) {
+    const eased = easeDelays(
+      steps.map((step) => step.delayMs),
+      timing.easing,
+    );
+    for (let i = 0; i < steps.length; i++) {
+      const delayMs = eased[i];
+      const step = steps[i];
+      if (delayMs !== step.delayMs) {
+        steps[i] = { delayMs, state: step.state };
+      }
+    }
+  }
 
   return { initial, final, steps, noOp: false };
 }
