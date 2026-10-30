@@ -48,7 +48,7 @@ A **pure** description of the whole animation — no timers, no side effects:
 const plan = planMorph({
   from: '3초 정도',
   to: '300ms 정도',
-  timing: { typePerFrameMs: 30 }, // Partial<MorphTiming>
+  timing: { typePerFrameMs: 30, easing: 'ease-in-out' }, // Partial<MorphTiming>
 });
 // plan.initial        -> RenderState rendering `from`
 // plan.final          -> RenderState rendering `to`
@@ -79,7 +79,7 @@ c.pause();   // hold current state
 c.reset();   // back to `from`
 c.finish();  // jump to `to` (idempotent per attempt)
 c.setPair(newFrom, newTo);   // recompute for new text
-c.setTiming({ typePerFrameMs: 30 });
+c.setTiming({ typePerFrameMs: 30, easing: 'ease-in-out' });
 c.destroy(); // cancel timers + unsubscribe
 ```
 

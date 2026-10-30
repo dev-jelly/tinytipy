@@ -101,6 +101,34 @@ body {
 }
 .pg-toggle + .pg-toggle { margin-left: 0; }
 
+.pg-easing {
+  flex: 1 0 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+.pg-easing-label {
+  color: var(--muted);
+  font-size: 13px;
+  margin-right: 2px;
+}
+.pg-easing button {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 12px;
+  padding: 8px 10px;
+}
+.pg-easing button.is-active {
+  border-color: var(--accent);
+  background: rgba(110, 168, 255, 0.12);
+  color: var(--accent);
+}
+.pg-easing button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
 .pg-raw {
   margin-top: 22px;
   display: grid;

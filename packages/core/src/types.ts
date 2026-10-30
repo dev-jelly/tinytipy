@@ -63,6 +63,17 @@ export interface MorphPlan {
   readonly noOp: boolean;
 }
 
+/**
+ * CSS `transition-timing-function` keywords. Applied to the morph timeline
+ * (not to interpolated CSS properties — the morph is discrete steps).
+ */
+export type MorphEaseName = 'linear' | 'ease' | 'ease-in' | 'ease-out' | 'ease-in-out';
+
+/** Cubic-bezier control points `cubic-bezier(x1, y1, x2, y2)`. `x1`/`x2` must be in [0, 1]. */
+export type MorphCubicBezier = readonly [x1: number, y1: number, x2: number, y2: number];
+
+export type MorphEasing = MorphEaseName | MorphCubicBezier;
+
 /** Tunable animation timing. All fields optional when passed by users. */
 export interface MorphTiming {
   /** Delay before the very first edit begins. */
@@ -77,6 +88,12 @@ export interface MorphTiming {
   typePerFrameMs: number;
   /** Final settle delay before resolving to `done`. */
   settleMs: number;
+  /**
+   * Timing function for the whole morph. The `*Ms` fields set the linear
+   * baseline duration; this warps that timeline (same total time). Default
+   * `linear`. Also accepts a cubic-bezier 4-tuple.
+   */
+  easing: MorphEasing;
 }
 
 /** Cursor anchor descriptor (used internally by planners and adapters). */

@@ -135,8 +135,14 @@ steady under reduced motion.
   pauseBeforeTypingMs: 60, // pause between erase and type in a hunk
   typePerFrameMs: 42,      // per composition-frame typing speed
   settleMs: 180,           // final settle before `done`
+  easing: 'linear',        // CSS timing function: linear | ease | ease-in | ease-out | ease-in-out
+                           // or a cubic-bezier tuple, e.g. [0.4, 0, 0.2, 1]
 }
 ```
+
+`easing` warps the morph timeline over the same total duration (like CSS
+`transition-timing-function`). `ease-in` starts slow, `ease-out` finishes slow,
+`ease-in-out` does both. The `*Ms` fields still set the linear baseline.
 
 ---
 
